@@ -1,15 +1,13 @@
 import os
 
 from dotenv import load_dotenv
-from loguru import logger, Logger
+from loguru import logger
 
 load_dotenv()
 
 
 class Config:
-    BASE_URL = "https://www.olx.ua"
-    MAIN_PAGE = f"{BASE_URL}/list/"
-    AD_SELECTOR = ".css-l9drzq"
+    MAIN_API = "https://www.olx.ua/api/v1/offers/"
     HEADERS_FOR_VIEWS = {
         "Content-Type": "application/json",
         "Authorization": "ANONYMOUS",
@@ -27,10 +25,16 @@ class Config:
         "https://production-graphql.eu-sharedservices.olxcdn.com/graphql"
     )
     API_URL = "https://www.olx.ua/api/v1/offers/{}"
+    POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
+    POSTGRES_USERNAME = os.getenv("POSTGRES_USER")
+    POSTGRES_DB = os.getenv("POSTGRES_DB")
+    POSTGRES_HOST = os.getenv("POSTGRES_HOST")
     DATABASE_URI = os.getenv("DATABASE_URI")
     LOG_DIR = "logs"
+    DUMPS_DIR = "dumps"
+    DUMP_FILENAME = "dump_{}.sql"
 
-    def get_logger(self) -> Logger:
+    def get_logger(self):
         os.makedirs(self.LOG_DIR, exist_ok=True)
         logger.add(
             f"{self.LOG_DIR}/scraper.log",
@@ -42,3 +46,4 @@ class Config:
 
 
 config = Config()
+my_logger = config.get_logger()
